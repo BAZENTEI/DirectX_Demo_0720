@@ -199,8 +199,8 @@ void SetBullet(D3DXVECTOR3 pos)
 	{
 		BULLET *blt = GetBulletAddress(0);
 
-		blt->pos = D3DXVECTOR3(pos.x + (TEXTURE_PLAYER_SIZE_X / 2 - TEXTURE_BULLET_SIZE_X / 2), pos.y + (TEXTURE_PLAYER_SIZE_Y / 2 - TEXTURE_BULLET_SIZE_Y / 2), 0.0f);
-
+		//blt->pos = D3DXVECTOR3(pos.x + (TEXTURE_PLAYER_SIZE_X / 2 - TEXTURE_BULLET_SIZE_X / 2), pos.y + (TEXTURE_PLAYER_SIZE_Y / 2 - TEXTURE_BULLET_SIZE_Y / 2), 0.0f);
+		blt->pos = D3DXVECTOR3(pos.x - TEXTURE_BULLET_SIZE_X / 2, pos.y - TEXTURE_BULLET_SIZE_Y / 2, 0.0f);
 		SetVertexBullet();
 
 		bullet->use = true;								//Žg—p’†

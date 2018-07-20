@@ -9,6 +9,7 @@
 #include "input.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "score.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -28,6 +29,8 @@ HRESULT Init(HWND hWnd, BOOL bWindow);
 void Uninit(void);
 void Update(void);
 void Draw(void);
+
+void DrawScore();
 
 #ifdef _DEBUG
 void DrawFPS(void);
@@ -356,10 +359,10 @@ void Draw(void)
 	{
 		// ポリゴンの描画処理
 		DrawBullet();
-
 		DrawEnemy();
-
 		DrawPlayer();
+
+		DrawScore();
 		
 #ifdef _DEBUG
 		// FPS表示
@@ -405,28 +408,12 @@ void DrawFPS(void)
 
 
 
-
-/*
-void BoundingBox(void)
-{
-	BULLET *blt = GetBulletAddress(0);
-	ENEMY *emy = GetEnemyAddress(0);
-
-	if ((TEXTURE_BULLET_SIZE_X + blt->pos.x > emy->pos.x) && (blt->pos.x < emy->pos.x + TEXTURE_ENEMY_SIZE_X))
-	{
-		if ((TEXTURE_BULLET_SIZE_Y + blt->pos.y > emy->pos.y) && (blt->pos.y < emy->pos.y + TEXTURE_ENEMY_SIZE_Y))
-		{
-			blt->use = false;
-			emy->use = false;
-		}
-	}
-}*/
-
 //あたり判定
 void BoundingBox(void)
 {
 	BULLET *blt = GetBulletAddress(0);
 	ENEMY *emy = GetEnemyAddress(0);
+	int *scr = GetScoreAddress();
 
 	if (blt->use == true)						//処理のセーフ
 	{
@@ -438,9 +425,28 @@ void BoundingBox(void)
 
 				blt->use = false;
 				emy->use = false;
+				AddScore();
+				
 
 			}
 		}
 	}
 }
 
+
+
+//score debug
+void DrawScore(void)
+{
+	//文字表現の範囲max
+	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	
+	TCHAR str[256];
+
+	int *score = GetScoreAddress();				//score アドレス取得
+
+	wsprintf(str, _T("Score:%d\n"), *score);
+
+	// テキスト描画
+	g_pD3DXFont->DrawText(NULL, str, -1, &rect, DT_RIGHT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+}

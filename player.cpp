@@ -33,8 +33,8 @@ static VERTEX_2D				g_vertexWk[NUM_VERTEX];		// 頂点情報格納ワーク
 //int						g_nCountAnim;						// アニメーションカウント
 //int						g_nPatternAnim;						// アニメーションパターンナンバー
 
-float					g_fRadiusPlayer;					// ポリゴンの半径
-float					g_fBaseAnglePlayer;					// ポリゴンの角度
+//float					g_fRadiusPlayer;					// ポリゴンの半径
+//float					g_fBaseAnglePlayer;					// ポリゴンの角度
 
 PLAYER player[PLAYER_MAX];									//プレイヤーの配列
 
@@ -45,14 +45,21 @@ HRESULT InitPlayer(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	
+	//初期化
 	PLAYER *ply = GetPlayerAddress(0);
 
-	ply->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	ply->pos = D3DXVECTOR3(TEXTURE_PLAYER_SIZE_X / 2, TEXTURE_PLAYER_SIZE_Y / 2, 0.0f);
+	//ply->pos = D3DXVECTOR3(0.0f,0.0f, 0.0f);
 	ply->rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	ply->nCountAnim = 0;
 	ply->nPatternAnim = 0;
-	ply->use = false;
+	ply->use = false;			
+	
+	//回転の設定
+	ply->BaseAngle   = atan2f(TEXTURE_PLAYER_SIZE_Y, TEXTURE_PLAYER_SIZE_X);
+	D3DXVECTOR2 temp = D3DXVECTOR2(TEXTURE_PLAYER_SIZE_X/2, TEXTURE_PLAYER_SIZE_Y/2);
+	ply->Radius = D3DXVec2Length(&temp);
 
 
 	// 頂点情報の作成
@@ -126,6 +133,9 @@ void UpdatePlayer(void)
 		SetBullet(ply->pos);
 	}
 
+	//回転
+	ply->rot.z += 0.1f;
+	
 
 	SetVertexPlayer();	// 頂点の計算処理
 	
@@ -203,11 +213,27 @@ void SetVertexPlayer(void)
 {
 	PLAYER *ply = GetPlayerAddress(0);
 
+	
+
+
 	// 頂点座標の設定
-	g_vertexWk[0].vtx = D3DXVECTOR3(ply->pos.x, ply->pos.y, ply->pos.z);
-	g_vertexWk[1].vtx = D3DXVECTOR3((ply->pos.x)+TEXTURE_PLAYER_SIZE_X, ply->pos.y, ply->pos.z);
-	g_vertexWk[2].vtx = D3DXVECTOR3(ply->pos.x, (ply->pos.y)+TEXTURE_PLAYER_SIZE_Y, ply->pos.z);
-	g_vertexWk[3].vtx = D3DXVECTOR3((ply->pos.x)+TEXTURE_PLAYER_SIZE_X, (ply->pos.y)+TEXTURE_PLAYER_SIZE_Y, ply->pos.z);
+  /*g_vertexWk[0].vtx = D3DXVECTOR3(ply -> pos.x ,ply -> pos.y,ply -> pos.z);
+	g_vertexWk[1].vtx = D3DXVECTOR3(ply -> pos.x + TEXTURE_PLAYER_SIZE_X ,ply -> pos.y,ply -> pos.z);
+	g_vertexWk[2].vtx = D3DXVECTOR3(ply -> pos.x ,ply -> pos.y + TEXTURE_PLAYER_SIZE_Y ,ply -> pos.z);
+	g_vertexWk[3].vtx = D3DXVECTOR3(ply -> pos.x + TEXTURE_PLAYER_SIZE_X ,ply -> pos.y + TEXTURE_PLAYER_SIZE_Y ,ply -> pos.z);*/
+	
+	g_vertexWk[0].vtx = D3DXVECTOR3(ply->pos.x  - cosf(ply->BaseAngle + ply->rot.z) * (ply->Radius)
+		                          , ply->pos.y  - sinf(ply->BaseAngle + ply->rot.z) * (ply->Radius)
+								  , ply->pos.z);
+	g_vertexWk[1].vtx = D3DXVECTOR3(ply->pos.x  + cosf(ply->BaseAngle - ply->rot.z) * (ply->Radius)
+								  , ply->pos.y  - sinf(ply->BaseAngle - ply->rot.z) * (ply->Radius)
+								  , ply->pos.z);
+	g_vertexWk[2].vtx = D3DXVECTOR3(ply->pos.x  - cosf(ply->BaseAngle - ply->rot.z) * (ply->Radius)
+								  , ply->pos.y  + sinf(ply->BaseAngle - ply->rot.z) * (ply->Radius)
+								  , ply->pos.z);
+	g_vertexWk[3].vtx = D3DXVECTOR3(ply->pos.x  + cosf(ply->BaseAngle + ply->rot.z) * (ply->Radius)
+								  , ply->pos.y  + sinf(ply->BaseAngle + ply->rot.z) * (ply->Radius)
+		                          , ply->pos.z);
 }
 
 

@@ -37,8 +37,12 @@ typedef struct
 	D3DXVECTOR3				rot;						// ポリゴンの回転量
 	int						nCountAnim;					// アニメーションカウント
 	int						nPatternAnim;				// アニメーションパターンナンバー
-	bool                    use;						//使用flag
+	bool                    use;						//flag 使用かどうか
 
+	float					Radius;						// ポリゴンの半径
+	float					BaseAngle;					// ポリゴンの角度
+
+	
 }PLAYER;
 
 //*****************************************************************************
