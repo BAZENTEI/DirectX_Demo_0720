@@ -28,6 +28,8 @@
 
 #define	NUM_BULLET		(2)				    // polygon数
 
+#define BULLET_MAX	(5)
+
 
 //*****************************************************************************
 // 構造体定義
@@ -39,6 +41,12 @@ typedef struct
 	int						nCountAnim;					// アニメーションカウント
 	int						nPatternAnim;				// アニメーションパターンナンバー
 	bool                    use;						//使用flag
+
+	float					Radius;					// ポリゴンの半径
+	float					fBaseAngle;					// ポリゴンの角度
+
+	VERTEX_2D	            vertexWk[NUM_VERTEX];		// 頂点情報格納ワーク
+	LPDIRECT3DTEXTURE9		Texture;					// テクスチャ情報
 
 }BULLET;
 

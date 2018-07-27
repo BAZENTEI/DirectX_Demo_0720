@@ -25,6 +25,8 @@
 
 #define	NUM_ENEMY		(2)				    // polygon数
 
+#define ENEMY_MAX	(2)
+
 
 
 //*****************************************************************************
@@ -35,8 +37,9 @@ typedef struct
 	 D3DXVECTOR3				pos;						// ポリゴンの座標
 	 D3DXVECTOR3				rot;						// ポリゴンの回転量
 	 int						nCountAnim;					// アニメーションカウント
-	 int						nPatternAnim;				// アニメーションパターンナンバー7
-	 bool                    use;						    //使用flag
+	 int						nPatternAnim;				// アニメーションパターンナンバー 0~7
+	 bool					    use;						//使用flag
+	 VERTEX_2D				    vertexWk[NUM_VERTEX];		// 頂点情報格納ワーク
 }ENEMY;
 
 //*****************************************************************************

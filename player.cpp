@@ -128,13 +128,22 @@ void UpdatePlayer(void)
 		ply->pos.x += 2.0f;
 	}
 
-	if (GetKeyboardPress(DIK_SPACE))
+	//if (GetKeyboardPress(DIK_SPACE))
+	if (GetKeyboardTrigger(DIK_SPACE))
 	{
 		SetBullet(ply->pos);
+		
 	}
 
+	/*else if (IsButtonTriggered(0, BUTTON_B))
+	{
+		D3DXVECTOR3 pos = player->pos;
+		pos.y -= TEXTURE_PLAYER_SIZE_Y;
+		SetBullet(pos);
+	}*/
+
 	//‰ñ“]
-	ply->rot.z += 0.1f;
+	//ply->rot.z += 0.1f;
 	
 
 	SetVertexPlayer();	// ’¸“_‚ÌŒvZˆ—

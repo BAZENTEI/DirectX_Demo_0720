@@ -31,7 +31,7 @@ void Update(void);
 void Draw(void);
 
 void DrawScore();
-
+void DrawBug();
 #ifdef _DEBUG
 void DrawFPS(void);
 #endif
@@ -337,10 +337,11 @@ void Update(void)
 	UpdateInput();
 
 	// ポリゴンの更新処理
-	UpdatePlayer();
 
 	UpdateBullet();
-
+	UpdatePlayer();
+	
+	
 	UpdateEnemy();
 
 	BoundingBox();
@@ -361,9 +362,10 @@ void Draw(void)
 		DrawBullet();
 		DrawEnemy();
 		DrawPlayer();
+	
 
-		DrawScore();
-		
+		//DrawScore();
+		DrawBug();
 #ifdef _DEBUG
 		// FPS表示
 		DrawFPS();
@@ -413,28 +415,58 @@ void BoundingBox(void)
 {
 	BULLET *blt = GetBulletAddress(0);
 	ENEMY *emy = GetEnemyAddress(0);
-	int *scr = GetScoreAddress();
 
-	if (blt->use == true)						//処理のセーフ
-	{
-		if (emy->use == true)
+	
+		//int *scr = GetScoreAddress();
+
+		if (blt->use == true)						//処理のセーフ
 		{
-			if ((TEXTURE_BULLET_SIZE_X + blt->pos.x > emy->pos.x) && (blt->pos.x < emy->pos.x + TEXTURE_ENEMY_SIZE_X) &&
-				(TEXTURE_BULLET_SIZE_Y + blt->pos.y > emy->pos.y) && (blt->pos.y < emy->pos.y + TEXTURE_ENEMY_SIZE_Y))
+			//for (ENEMY *emy = GetEnemyAddress(0); emy <= (emy0 + ENEMY_MAX); emy++)
+			for (int i = 0; i <= ENEMY_MAX; i++, emy++)
+
 			{
+				if (emy->use == true)
+				{
+					if ((TEXTURE_BULLET_SIZE_X + blt->pos.x > emy->pos.x) && (blt->pos.x < emy->pos.x + TEXTURE_ENEMY_SIZE_X)
+						&&(TEXTURE_BULLET_SIZE_Y + blt->pos.y > emy->pos.y) && (blt->pos.y < emy->pos.y + TEXTURE_ENEMY_SIZE_Y))
+					{
 
-				blt->use = false;
-				emy->use = false;
-				AddScore();
-				
+						blt->use = false;
+						emy->use = false;
+						//AddScore();
 
+						//break;
+					}
+				}
 			}
+			
 		}
-	}
+
+
+	 //  emy = GetEnemyAddress(1);
+		//if (blt->use == true)						//処理のセーフ
+		//{
+		//	
+		//	if (emy->use == true)
+		//	{
+		//		if ((TEXTURE_BULLET_SIZE_X + blt->pos.x > emy->pos.x) && (blt->pos.x < emy->pos.x + TEXTURE_ENEMY_SIZE_X) 
+		//			&&(TEXTURE_BULLET_SIZE_Y + blt->pos.y > emy->pos.y) && (blt->pos.y < emy->pos.y + TEXTURE_ENEMY_SIZE_Y))
+		//		{
+
+		//			blt->use = false;
+		//			emy->use = false;
+		//			//AddScore();
+
+
+		//		}
+		//	}
+		
+
+		/*}*/
 }
 
 
-
+/*
 //score debug
 void DrawScore(void)
 {
@@ -446,6 +478,23 @@ void DrawScore(void)
 	int *score = GetScoreAddress();				//score アドレス取得
 
 	wsprintf(str, _T("Score:%d\n"), *score);
+
+	// テキスト描画
+	g_pD3DXFont->DrawText(NULL, str, -1, &rect, DT_RIGHT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+}
+*/
+
+
+void DrawBug(void)
+{
+	//文字表現の範囲max
+	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
+	TCHAR str[256];
+
+	ENEMY *score = GetEnemyAddress(0);				//score アドレス取得
+
+	wsprintf(str, _T("Score:%d\n"), score->nPatternAnim);
 
 	// テキスト描画
 	g_pD3DXFont->DrawText(NULL, str, -1, &rect, DT_RIGHT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
