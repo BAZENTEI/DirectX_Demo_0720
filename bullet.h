@@ -42,7 +42,7 @@ typedef struct
 	int						nPatternAnim;				// アニメーションパターンナンバー
 	bool                    use;						//使用flag
 
-	float					Radius;					// ポリゴンの半径
+	float					Radius;					    // ポリゴンの半径
 	float					fBaseAngle;					// ポリゴンの角度
 
 	VERTEX_2D	            vertexWk[NUM_VERTEX];		// 頂点情報格納ワーク

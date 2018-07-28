@@ -10,6 +10,7 @@
 #include "enemy.h"
 #include "bullet.h"
 #include "score.h"
+#include <stdio.h>
 
 //*****************************************************************************
 // マクロ定義
@@ -492,9 +493,9 @@ void DrawBug(void)
 
 	TCHAR str[256];
 
-	ENEMY *score = GetEnemyAddress(0);				//score アドレス取得
+	PLAYER *ply = GetPlayerAddress(0);				//score アドレス取得
 
-	wsprintf(str, _T("Score:%d\n"), score->nPatternAnim);
+	sprintf(str, _T("Score:%f\n"), ply->pos.y);
 
 	// テキスト描画
 	g_pD3DXFont->DrawText(NULL, str, -1, &rect, DT_RIGHT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
